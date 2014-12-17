@@ -50,7 +50,7 @@ class Game
         # SET SHIP ORIENTATION
         print "\n#{ship.name.capitalize} set orientation"
         orientation = Random.rand > 0.5 ?  :horizontal : :vertical
-        print "\n#{ship.name.capitalize}'s orientation: #{position.to_s}"
+        print "\n#{ship.name.capitalize}'s orientation: #{position.inspect}"
 
         # SET SHIP POSITION
         print "\n#{ship.name.capitalize} set starting position"

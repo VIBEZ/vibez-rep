@@ -15,14 +15,13 @@ class Board
 
     if orientation == :vertical
       (0...ship.length).each do |number|
-        valid = grid[column][row + number] == ' ' ? true : false
-        valid = grid[column][row + number].nil? ? false : true
+        valid = !grid[column][row + number].nil? || grid[column][row + number] == ' ' ? true : false
         return false if valid == false
       end
     elsif orientation == :horizontal
       (0...ship.length).each do |number|
-        valid = grid[column + number][row] == ' ' ? true : false
-        valid = grid[column + number][row].nil? ? false : true
+        return false if grid[column + number].nil?
+        valid = !grid[column + number][row].nil? || grid[column + number][row] == ' ' ? true : false
         return false if valid == false
       end
     end
