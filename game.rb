@@ -40,25 +40,24 @@ class Game
   end
 
   def deploy_ships
+    valid = false
     print "\n"
     print_boards
     position = {}
     ships.each do |ship|
-      # SET SHIP ORIENTATION
-      print "\n#{ship.name.capitalize} set orientation"
-      if Random.rand > 0.5
-        orientation = :horizontal
-      else
-        orientation = :vertical
-      end
-      print "\n#{ship.name.capitalize}'s orientation: #{position.to_s}"
+      valid = false
+      while valid == false
+        # SET SHIP ORIENTATION
+        print "\n#{ship.name.capitalize} set orientation"
+        orientation = Random.rand > 0.5 ?  :horizontal : :vertical
+        print "\n#{ship.name.capitalize}'s orientation: #{position.to_s}"
 
-      # SET SHIP POSITION
-      print "\n#{ship.name.capitalize} set starting position"
-      position[:row_num] = Random.rand(10) + 1
-      position[:col_num] = Random.rand(10) + 1
-      puts position.inspect
-      board.place_ship(ship, position, orientation )
+        # SET SHIP POSITION
+        print "\n#{ship.name.capitalize} set starting position"
+        position[:row_num] = Random.rand(10)
+        position[:col_num] = Random.rand(10)
+        valid = true if board.valid_position(ship, position, orientation)
+      end
     end
   end
 

@@ -9,10 +9,32 @@ class Board
     @grid = Array.new(10).map! { Array.new(10, char) }
   end
 
+  def valid_position(ship, position, orientation)
+    column = position[:col_num]
+    row    = position[:row_num]
+
+    if orientation == :vertical
+      (0...ship.length).each do |number|
+        valid = grid[column][row + number] == ' ' ? true : false
+        valid = grid[column][row + number].nil? ? false : true
+        return false if valid == false
+      end
+    elsif orientation == :horizontal
+      (0...ship.length).each do |number|
+        valid = grid[column + number][row] == ' ' ? true : false
+        valid = grid[column + number][row].nil? ? false : true
+        return false if valid == false
+      end
+    end
+
+    place_ship(ship, position, orientation)
+  end
+
   def print_boards
     col_num = *(0..9)
     row_num = *(0..9)
 
+    puts ""
     print "\t"
     print row_num.join("\t")
     puts
