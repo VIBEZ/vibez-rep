@@ -15,12 +15,12 @@ def play
   end
 
   if response == "Y"
-    start = Game.new("game")
-    puts start.set_player
-    start.deploy_ships
-    start.board.print_boards
+    game = Game.new("game")
+    puts game.set_player
+    game.deploy_ships
+    game.board.print_boards
 
-    puts start.play_rounds
+    puts game.play_rounds
   else
     puts "Alrighty, Be sure to come back later"
   end

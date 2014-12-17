@@ -64,4 +64,14 @@ class Board
     end
   end
 
+  def attack_position(column, row)
+    # check if the position is empty or not
+    # if water
+    #   grid[column][row] = 'WATER'
+    # elsif ship
+    #   grid[column][row] = 'SHIP'
+    # end
+    # print_boards
+  end
+
 end
