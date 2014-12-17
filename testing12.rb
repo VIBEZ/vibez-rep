@@ -1,3 +1,108 @@
+require "colorize"
+
+class Ship
+
+  attr_reader :length, :hits, :fill_char
+
+  def initialize
+    @hits = 0
+  end
+
+  def hit
+    @hits += 1
+  end
+
+  def sunk?
+    @length == @hits
+  end
+
+  def to_s
+    @fill_char.colorize(:light_blue)
+  end
+end
+
+class AircraftCarrier < Ship
+  def initialize
+    @length = 5
+    @fill_char = 'A'
+    super
+  end
+end
+
+
+class Cruiser < Ship
+  def initialize
+    @length = 4
+    @fill_char = 'C'
+    super
+  end
+end
+
+
+class Destroyer1 < Ship
+  def initialize
+    @length = 3
+    @fill_char = 'D1'
+    super
+  end
+end
+
+
+class Destroyer2 < Ship
+  def initialize
+    @length = 3
+    @fill_char = 'D2'
+    super
+  end
+end
+
+
+class SubMarine < Ship
+  def initialize
+    @length = 2
+    @fill_char = 's'
+    super
+  end
+end
+
+
+class GridCell
+
+  attr_accessor :status, :ship
+
+  FILL_CHAR = {:open => '+',
+               :hit => 'X',
+               :miss => '0'}
+
+  def initialize(status = :open, ship = nil)
+    @status = status
+    @ship = ship
+  end
+
+  def to_s
+    if @ship && @status != :hit
+      @ship.to_s
+    elsif @status == :hit
+      FILL_CHAR[@status].colorize(:light_red)
+    elsif @status == :miss
+      FILL_CHAR[@status].colorize(:yellow)
+    else
+      FILL_CHAR[@status]
+    end
+  end
+
+  def hit
+    @status = :hit
+  end
+
+  def miss
+    @status = :miss
+    puts row.join('  ')
+  end
+end
+
+
+
 class Board
 
   attr_accessor :grid
@@ -64,40 +169,14 @@ class Board
     end
     return true
   end
-
-  class GridCell
-
-    attr_accessor :status, :ship
-
-    FILL_CHAR = {:open => '+',
-                 :hit => 'X',
-                 :miss => '0'}
-
-    def initialize(status = :open, ship = nil)
-      @status = status
-      @ship = ship
-    end
-
-    def to_s
-      if @ship && @status != :hit
-        @ship.to_s
-      elsif @status == :hit
-        FILL_CHAR[@status].colorize(:light_red)
-      elsif @status == :miss
-        FILL_CHAR[@status].colorize(:yellow)
-      else
-        FILL_CHAR[@status]
-      end
-    end
-
-    def hit
-      @status = :hit
-    end
-
-    def miss
-      @status = :miss
-      puts row.join('  ')
-    end
-  end
   puts row.join(' ')
 end
+
+
+
+
+
+
+
+
+
