@@ -1,6 +1,6 @@
 class Game
 
-  attr_reader :name, :ship, :player, :board
+  attr_reader :name, :ships, :player, :board
 
   def initialize(name)
     @name = name
@@ -40,60 +40,40 @@ class Game
   end
 
   def deploy_ships
-    valid = false
-    while valid == false do
-      print "\n"
-      print_boards                        #print board for reference
-      position = {}
-      player.ships.each do |ship|
-        while valid == false do
-          print "\n#{ship.name.capitalize} orientation: horizontal(H) or vertical(V)? "
-          input = gets.chomp.strip.upcase
-          if input == 'H' || input == 'HORIZONTAL'
-            orientation = :horizontal
-            valid = true
-          elsif input == 'V' || input == 'VERTICAL'
-            orientation = :vertical
-            valid = true
-          else
-            puts "Invalid orientation entry.".colorize(:light_yellow)
-          end
-        end
-        valid = false
-        while valid == false do
-          print "\n#{ship.name.capitalize} starting position  "
-          input = gets.chomp.rstrip.upcase
-          position[:row_num] = Board::COL_NUM.rindex(input.split("//", 2)[0])
-          position[:col_num] = Board::ROW_NUM.rindex(input.split("//", 2)[1])
-          puts position.inspect
-          if !position[:row_num].nil? && !position[:col_num].nil?
-            valid = true
-          else
-            puts "Invalid coordinates.".colorize(:yellow)
-          end
-        end
-        valid = false
-        if board.place_ship(ship, position, orientation )
-          valid = true
-        else
-          puts "Invalid position for ship.".colorize(:yellow)
-        end
+    print "\n"
+    print_boards
+    position = {}
+    ships.each do |ship|
+      # SET SHIP ORIENTATION
+      print "\n#{ship.name.capitalize} set orientation"
+      if Random.rand > 0.5
+        orientation = :horizontal
+      else
+        orientation = :vertical
       end
+      print "\n#{ship.name.capitalize}'s orientation: #{position.to_s}"
+
+      # SET SHIP POSITION
+      print "\n#{ship.name.capitalize} set starting position"
+      position[:row_num] = Random.rand(10) + 1
+      position[:col_num] = Random.rand(10) + 1
+      puts position.inspect
+      board.place_ship(ship, position, orientation )
     end
   end
 
   def play_rounds
     puts "\n\nTime to sink some ships! Good luck, #{@player.name}\n\n"
-    game_over = false
-    while game_over == false
-      @player.print_boards
-      player_round
-      if ships_left == 0
-        winner = @player.name
-        game_over = true
-        next
-      end
-    end
-    puts "\n\n#{winner} WINS!\n\n".colorize(:light_blue)
+    # game_over = false
+    # while game_over == false
+    #   @player.print_boards
+    #   player_round
+    #   if ships_left == 0
+    #     winner = @player.name
+    #     game_over = true
+    #     next
+    #   end
+    # end
+    # puts "\n\n#{winner} WINS!\n\n".colorize(:light_blue)
   end
 end

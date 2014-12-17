@@ -1,9 +1,5 @@
 class Board
-
   attr_accessor :grid, :direction, :position, :name, :col_num, :row_num
-
-  COL_NUM = "0123456789"
-  ROW_NUM = "0123456789"
 
   def initialize(char = ' ')
     set_grid(char)
@@ -13,7 +9,7 @@ class Board
     @grid = Array.new(10).map! { Array.new(10, char) }
   end
 
-  def print_board
+  def print_boards
     col_num = *(0..9)
     row_num = *(0..9)
 
@@ -32,7 +28,7 @@ class Board
   end
 
   def place_ship(ship, position, orientation)
-    "I'm about to place a ship"
+    puts "I'm about to place a ship"
     puts ship.inspect
     puts position.inspect
     puts orientation.inspect

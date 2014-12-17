@@ -13,21 +13,19 @@ def play
     print "Wanna play some Battleship? (Y/N) ".colorize(:black)
     response = gets.chomp.strip.upcase
   end
-  puts response
+
   if response == "Y"
     start = Game.new("game")
     puts start.set_player
     start.deploy_ships
-    start.Board.print_boards
+    start.board.print_boards
 
-    while response == "Y"
-      puts set_player
-      puts play_round
-    end
+    puts start.play_rounds
   else
     puts "Alrighty, Be sure to come back later"
   end
+
 end
 
-
+# Run the code
 play
