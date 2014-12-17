@@ -7,7 +7,6 @@ class Ship
     @direction = 1
     @name = name
     @position = []
-
   end
 
   def update(x=0,y=0)

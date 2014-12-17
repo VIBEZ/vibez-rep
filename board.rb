@@ -28,10 +28,19 @@ class Board
   end
 
   def place_ship(ship, position, orientation)
-    puts "I'm about to place a ship"
-    puts ship.inspect
-    puts position.inspect
-    puts orientation.inspect
+    column = position[:col_num]
+    row    = position[:row_num]
+    grid[column][row] = ship.name
+
+    if orientation == :vertical
+      (0...ship.length).each do |number|
+        grid[column][row + number] = ship.name
+      end
+    elsif orientation == :horizontal
+      (0...ship.length).each do |number|
+        grid[column + number][row] = ship.name
+      end
+    end
   end
 
 end
