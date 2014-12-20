@@ -20,9 +20,10 @@
   end
 
   class Board
-    attr_accessor :grid, :direction, :position, :name, :col_num, :row_num, :shots
+    attr_accessor :grid, :direction, :position, :name, :col_num, :row_num, :shots, :ships
 
-    def initialize(char = ' ')
+    def initialize(ships = nil, char = ' ')
+      @ships = ships
       set_grid(char)
     end
 
@@ -91,8 +92,8 @@
 
             # If chosen position hasn't already been a missed('M'), execute check_ship and update_shots if
             # chosen position isn't empty('0')
-            if board.grid[x][y]  != 'M'
-              if board.grid[x][y] != '0'
+            if grid[x][y]  != 'M'
+              if grid[x][y] != '0'
                 check_ship(x,y)
                 update_shots(x,y)
 
@@ -100,7 +101,7 @@
                 # grid with value 'W'(water)
               else
                 puts 'You missed!'
-                @board.grid[x][y] = 'M'
+                @grid[x][y] = 'M'
                 @shots.grid[x][y]='W'.colorize(:background => :blue, :color => :blue)
               end
 
@@ -112,20 +113,20 @@
           end # End of check_shot method
 
           # Checks if player shot was a hit and if all ships have been sunk
-          def check_ship  (x,y)
+          def check_ship(x,y)
 
             # If player guess is not already a hit and the position is occupied by the ship update the hit value from '0' to '1'
-            if board.grid[x][y] != 'X'
-              s = ships.detect { |s| s.name == board.grid[x][y] }
+            if grid[x][y] != 'X'
+              s = ships.detect { |s| s.name == grid[x][y] }
               puts 'Ship hit!!!'
-              s.pos.each do |p|
+              s.position.each do |p|
                 if p[:x] == x and p[:y] == y
                   p[:hit] = 1
                 end
               end
 
               # If none of the ships hit values is a '0' then ship is sunk
-              sink = s.pos.detect { |p| p[:hit] == 0 }
+              sink = s.position.detect { |p| p[:hit] == 0 }
               if sink.nil?
                 puts 'Ship '+s.name+' was sunk!!'
               end
@@ -143,8 +144,8 @@
             @pos << {:x => x, :y => y, :hit => 0 }
 
           end # End of update_pos method
-      [
-        # For each ship generate store position placed in it
+
+        # For eachship generate store position placed in it
           def update_pos(x=0,y=0)
 
             # E.g. for a yet to be hit submarine placed at starting position (0,0) horizontally, pos will be:
@@ -159,7 +160,7 @@
             win = true
            # For each ship check if none of the hit key values is 0(is not sunk). If false game isn't over.
             ships.each do |s|
-              sink = s.pos.detect { |p| p[:hit] == 0 }
+              sink = s.position.detect { |p| p[:hit] == 0 }
               if !sink.nil?
                 win = false
                 break
@@ -181,6 +182,14 @@
       # print_boards
     end
 
+class Player
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+end
+
 
   class Game
 
@@ -188,9 +197,9 @@
 
     def initialize(name)
       @name = name
-      @board = Board.new
-      @target_board = Board.new
       @ships = [ Ship.new(5, 'A'), Ship.new(4,'C'), Ship.new(3,'D1'), Ship.new(3,'D2'), Ship.new(2, 'S')]
+      @board = Board.new(@ships)
+      @target_board = Board.new(@ships)
     end
 
     def to_s
@@ -219,7 +228,7 @@
       while name.empty? do
         print "Enter name: "
         name = gets.chomp.strip
-        @player = player.new(name)
+        @player = Player.new(name)
       end
     end
 
@@ -244,9 +253,6 @@
         end
       end
     end
-
-
-
   end
 
 
@@ -266,8 +272,12 @@
       game.deploy_ships
       game.board.print_boards
 
-      puts game.play_rounds
-      puts game.check_shot
+      puts "Enter X: "
+      x = gets.chomp.strip
+      puts "Enter Y: "
+      y = gets.chomp.strip
+
+      puts game.board.check_shot(x, y)
       puts game.check_ship
       puts game.update_pos
       puts game.check_win
